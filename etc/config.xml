@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <api_integration>
+            <remote_price>
+                <web_price_lvl_code>1</web_price_lvl_code>
+                <debug>0</debug>
+                <cache>1</cache>
+            </remote_price>
+        </api_integration>
+    </default>
+</config>

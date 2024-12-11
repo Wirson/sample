@@ -1,0 +1,22 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+/** @var \Magento\Catalog\Helper\Data $categoryHelper */
+$categoryHelper = $this->helper(\Magento\Catalog\Helper\Data::class);
+$cat = $categoryHelper->getCategory();
+
+?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Wira_AjaxPrice/js/product/list/prices": {
+            "displayMode": "<?= $escaper->escapeJs($cat?->getData('frontend_display_mode')); ?>",
+            "loaderIconUrl": "<?= $escaper->escapeUrl($block->getViewFileUrl('images/loader-2.gif')); ?>",
+            "priceUrl": "<?= $block->getUrl('catalog/product/priceList')?>"
+        }
+    }
+}
+</script>

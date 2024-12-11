@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Wira\AjaxPrice\Model\CurrentCustomerProductUpdater" type="Wira\AjaxPrice\Model\ProductUpdater">
+        <arguments>
+            <argument name="updaterPool" xsi:type="array">
+                <item name="ProductStockUpdater" xsi:type="object">\Wira\AjaxPrice\Model\Updater\ProductStock</item>
+                <item name="CustomerProductPriceUpdater" xsi:type="object">\Wira\AjaxPrice\Model\Updater\CustomerProductPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Wira\AjaxPrice\Model\GlobalProductUpdater" type="Wira\AjaxPrice\Model\ProductUpdater">
+        <arguments>
+            <argument name="updaterPool" xsi:type="array">
+                <item name="ProductStockUpdater" xsi:type="object">\Wira\AjaxPrice\Model\Updater\ProductStock</item>
+                <item name="WebPriceUpdater" xsi:type="object">\Wira\AjaxPrice\Model\Updater\WebProductPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="RemotePriceLoggerHandler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/remote_price.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="RemotePriceLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">RemotePriceLoggerHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Wira\AjaxPrice\Model\ApiClient" type="Wira\ApiIntegration\Model\Api\Client">
+        <arguments>
+            <argument name="endpointConfig" xsi:type="object">Wira\AjaxPrice\Model\Config</argument>
+            <argument name="logger" xsi:type="object">RemotePriceLogger</argument>
+        </arguments>
+    </virtualType>
+    <type name="Wira\AjaxPrice\Model\Service\RemotePrice">
+        <arguments>
+            <argument name="apiClient" xsi:type="object">Wira\AjaxPrice\Model\ApiClient</argument>
+        </arguments>
+    </type>
+
+    <type name="Wira\AjaxPrice\Model\ProductUpdater">
+        <arguments>
+            <argument name="logger" xsi:type="object">RemotePriceLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Wira\AjaxPrice\Plugin\Product">
+        <arguments>
+            <argument name="productUpdater" xsi:type="object">Wira\AjaxPrice\Model\CurrentCustomerProductUpdater</argument>
+        </arguments>
+    </type>
+    <type name="Wira\AjaxPrice\Observer\ProductCollection">
+        <arguments>
+            <argument name="productUpdater" xsi:type="object">Wira\AjaxPrice\Model\CurrentCustomerProductUpdater</argument>
+        </arguments>
+    </type>
+
+    <type name="Wira\AjaxPrice\Cron\UpdateProduct">
+        <arguments>
+            <argument name="productUpdater" xsi:type="object">Wira\AjaxPrice\Model\GlobalProductUpdater</argument>
+            <argument name="logger" xsi:type="object">RemotePriceLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="productUpdate" xsi:type="object">Wira\AjaxPrice\Console\Command\ProductUpdate</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

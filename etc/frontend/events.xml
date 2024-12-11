@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="catalog_product_collection_load_after">
+        <observer name="Wira_AjaxPrice::update_product_collection_price" instance="Wira\AjaxPrice\Observer\ProductCollection"/>
+    </event>
+    <event name="controller_action_predispatch_checkout_cart_index">
+        <observer name="Wira_AjaxPrice::cart_refresh_quote" instance="Wira\AjaxPrice\Observer\CheckoutRefreshQuote"/>
+    </event>
+    <event name="controller_action_predispatch_checkout_index_index">
+        <observer name="Wira_AjaxPrice::checkout_refresh_quote" instance="Wira\AjaxPrice\Observer\CheckoutRefreshQuote"/>
+    </event>
+</config>

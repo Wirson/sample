@@ -1,0 +1,15 @@
+<?php
+/** @var \Magento\Catalog\Block\Product\View $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<script type="text/x-magento-init">
+{
+    ".product-info-price": {
+        "Wira_AjaxPrice/js/product/view/price": {
+            "loaderIconUrl": "<?= $escaper->escapeUrl($block->getViewFileUrl('images/loader-2.gif')); ?>",
+            "priceUrl": "<?= $escaper->escapeJs($block->getUrl('catalog/product/price')) ?>",
+            "sku": "<?= $escaper->escapeJs($block->getProduct()->getSku()) ?>"
+        }
+    }
+}
+</script>
